@@ -3,9 +3,9 @@ const path = require('path');
 const axios = require('axios');
 
 // Cloudflare API settings
-const CF_API_TOKEN = ${{ secrets.CF_API_TOKEN }};
-const CF_ZONE_ID = ${{ secrets.CF_ZONE_ID }};
-const CF_API_URL = `https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/dns_records`;
+const CF_API_TOKEN = process.env.CF_API_TOKEN;
+const CF_ZONE_ID = process.env.CF_ZONE_ID;
+const CF_API_URL = `https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/dns_records`;
 
 // Default TTL if none is provided (3600 seconds)
 const DEFAULT_TTL = 3600;
@@ -44,9 +44,9 @@ fs.readdir(recordsDir, (err, files) => {
             console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
             return;
           }
-          const priority = parseInt(parts[2]);
-          recordContent = parts[3]; // The mail server
-          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // The TTL or default
+          const priority = parseInt(parts[2]); // MX record's priority
+          recordContent = parts[3]; // MX record content (mail server)
+          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // TTL or default
           
           data = {
             type: 'MX',
@@ -55,10 +55,21 @@ fs.readdir(recordsDir, (err, files) => {
             priority: priority,
             ttl: ttl
           };
-        } else {
-          // Handle other record types (A, AAAA, CNAME, TXT)
-          recordContent = parts.slice(2, -1).join(' '); // Handle spaces for TXT
+        } else if (recordType === 'TXT') {
+          // Handle TXT record with quotes and possible spaces
+          recordContent = parts.slice(2, parts.length - 1).join(' ').replace(/['"]+/g, ''); // Remove quotes
           ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
+
+          data = {
+            type: 'TXT',
+            name: name,
+            content: recordContent,
+            ttl: ttl
+          };
+        } else {
+          // Handle other record types (A, AAAA, CNAME)
+          recordContent = parts[2]; // Content for A, AAAA, CNAME
+          ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
 
           data = {
             type: recordType,
