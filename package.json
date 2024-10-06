@@ -1,0 +1,13 @@
+{
+  "name": "dns-configs",
+  "version": "1.0.0",
+  "description": "A system for managing DNS records using GitHub pull requests and Cloudflare.",
+  "main": "processDns.js",
+  "scripts": {
+    "start": "node processDns.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "fs": "0.0.1-security"
+  }
+}
