@@ -34,17 +34,20 @@ fs.readdir(recordsDir, (err, files) => {
 
         const recordType = parts[0]; // A, AAAA, CNAME, TXT, MX, etc.
         const name = parts[1]; // The domain or subdomain name
-        let recordContent = parts.slice(2, -1).join(' '); // Capture the content, handle spaces for TXT
-        const ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
-
+        let recordContent;
+        let ttl;
         let data = {};
+
         if (recordType === 'MX') {
-          if (parts.length < 4) {
+          // Ensure MX record is properly formatted
+          if (parts.length < 5) {
             console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
             return;
           }
           const priority = parseInt(parts[2]);
-          recordContent = parts[3]; // After priority, the content should be at parts[3]
+          recordContent = parts[3]; // The mail server
+          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // The TTL or default
+          
           data = {
             type: 'MX',
             name: name,
@@ -53,6 +56,10 @@ fs.readdir(recordsDir, (err, files) => {
             ttl: ttl
           };
         } else {
+          // Handle other record types (A, AAAA, CNAME, TXT)
+          recordContent = parts.slice(2, -1).join(' '); // Handle spaces for TXT
+          ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
+
           data = {
             type: recordType,
             name: name,
