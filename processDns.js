@@ -46,6 +46,14 @@ fs.readdir(recordsDir, (err, files) => {
           }
           const priority = parseInt(parts[2]); // MX record's priority
           recordContent = parts[3]; // MX record content (mail server)
+          
+          // Validate if content is a valid hostname and not an IP address
+          const isValidHostname = /^[a-zA-Z0-9.-]+$/.test(recordContent);
+          if (!isValidHostname) {
+            console.error(`Invalid MX record content: ${recordContent} should be a hostname, not an IP address.`);
+            return;
+          }
+
           ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // TTL or default
           
           data = {
