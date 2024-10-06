@@ -1,0 +1,31 @@
+name: Process DNS Pull Request
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  updateDNS:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run DNS processing script
+        run: node processDns.js
+
+      - name: Cloudflare DNS Update
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+        run: |
+          node processDns.js
