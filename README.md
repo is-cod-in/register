@@ -1,3 +1,7 @@
+<p align="center">
+   <img alt="is-cod.in Banner" src="https://cdn.discordapp.com/attachments/1248518854087540799/1292295432168538213/Untitled274_20241006085230.png?ex=6703e028&is=67028ea8&hm=6a726454427e648da951d8bae2223994669ec7d3c4f3d56f67b04a61729512a1&">
+</p>
+
 # 🌐 is-cod.in subdomains
 
 ---
