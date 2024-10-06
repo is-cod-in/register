@@ -44,9 +44,10 @@ fs.readdir(recordsDir, (err, files) => {
             console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
             return;
           }
+
           const priority = parseInt(parts[2]); // MX record's priority
           recordContent = parts[3]; // MX record content (mail server)
-          
+
           // Validate if content is a valid hostname and not an IP address
           const isValidHostname = /^[a-zA-Z0-9.-]+$/.test(recordContent);
           if (!isValidHostname) {
@@ -87,6 +88,9 @@ fs.readdir(recordsDir, (err, files) => {
           };
         }
 
+        // Debug: Log the payload before sending it to Cloudflare
+        console.log('Sending the following data to Cloudflare:', data);
+
         // Make a POST request to Cloudflare API
         axios.post(CF_API_URL, data, {
           headers: {
@@ -95,14 +99,18 @@ fs.readdir(recordsDir, (err, files) => {
           }
         })
         .then(response => {
-          if (response.status === 200) {
+          if (response.data.success) {
             console.log(`Successfully updated ${recordType} record for ${name}`);
           } else {
-            console.error(`Failed to update ${recordType} record for ${name}`);
+            console.error(`Failed to update ${recordType} record for ${name}:`, response.data.errors);
           }
         })
         .catch(error => {
-          console.error('Error with Cloudflare API', error.response ? error.response.data : error.message);
+          if (error.response && error.response.data) {
+            console.error('Error with Cloudflare API:', error.response.data);
+          } else {
+            console.error('Network or other error:', error.message);
+          }
         });
       });
     }
