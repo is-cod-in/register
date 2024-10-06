@@ -39,35 +39,35 @@ fs.readdir(recordsDir, (err, files) => {
         let data = {};
 
         if (recordType === 'MX') {
-  // Ensure MX record is properly formatted
-  if (parts.length < 5) {
-    console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
-    return;
-  }
+          // Ensure MX record is properly formatted
+          if (parts.length < 5) {
+            console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
+            return;
+          }
 
-  const priority = parseInt(parts[2], 10); // Ensure this is parsed correctly
-  recordContent = parts[3]; // This should be the hostname of the mail server
+          const priority = parseInt(parts[2]); // MX record's priority
+          recordContent = parts[3]; // MX record content (mail server)
 
-  // Validate if content is a valid hostname
-  const isValidHostname = /^[a-zA-Z0-9.-]+$/.test(recordContent);
-  if (!isValidHostname) {
-    console.error(`Invalid MX record content: ${recordContent} should be a hostname, not an IP address.`);
-    return;
-  }
+          // Validate if content is a valid hostname and not an IP address
+          const isValidHostname = /^[a-zA-Z0-9.-]+$/.test(recordContent);
+          if (!isValidHostname) {
+            console.error(`Invalid MX record content: ${recordContent} should be a hostname, not an IP address.`);
+            return;
+          }
 
-  ttl = !isNaN(parts[4]) ? parseInt(parts[4], 10) : DEFAULT_TTL; // TTL or default
-  
-  data = {
-    type: 'MX',
-    name: name,
-    content: recordContent, // Ensure this is a valid hostname
-    priority: priority, // Should now be a valid number
-    ttl: ttl
-  };
+          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // TTL or default
+          
+          data = {
+            type: 'MX',
+            name: name,
+            content: recordContent,
+            priority: priority,
+            ttl: ttl
+          };
         } else if (recordType === 'TXT') {
           // Handle TXT record with quotes and possible spaces
           recordContent = parts.slice(2, parts.length - 1).join(' ').replace(/['"]+/g, ''); // Remove quotes
-          ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1], 10) : DEFAULT_TTL;
+          ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
 
           data = {
             type: 'TXT',
@@ -78,7 +78,7 @@ fs.readdir(recordsDir, (err, files) => {
         } else {
           // Handle other record types (A, AAAA, CNAME)
           recordContent = parts[2]; // Content for A, AAAA, CNAME
-          ttl = !isNaN(parts[3]) ? parseInt(parts[3], 10) : DEFAULT_TTL;
+          ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
 
           data = {
             type: recordType,
