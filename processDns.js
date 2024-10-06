@@ -45,7 +45,7 @@ fs.readdir(recordsDir, (err, files) => {
             return;
           }
 
-          const priority = parseInt(parts[2]); // MX record's priority
+          const priority = parseInt(parts[2], 10); // MX record's priority
           recordContent = parts[3]; // MX record content (mail server)
 
           // Validate if content is a valid hostname and not an IP address
@@ -55,7 +55,7 @@ fs.readdir(recordsDir, (err, files) => {
             return;
           }
 
-          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // TTL or default
+          ttl = !isNaN(parts[4]) ? parseInt(parts[4], 10) : DEFAULT_TTL; // TTL or default
           
           data = {
             type: 'MX',
@@ -67,7 +67,7 @@ fs.readdir(recordsDir, (err, files) => {
         } else if (recordType === 'TXT') {
           // Handle TXT record with quotes and possible spaces
           recordContent = parts.slice(2, parts.length - 1).join(' ').replace(/['"]+/g, ''); // Remove quotes
-          ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
+          ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1], 10) : DEFAULT_TTL;
 
           data = {
             type: 'TXT',
@@ -78,7 +78,7 @@ fs.readdir(recordsDir, (err, files) => {
         } else {
           // Handle other record types (A, AAAA, CNAME)
           recordContent = parts[2]; // Content for A, AAAA, CNAME
-          ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
+          ttl = !isNaN(parts[3]) ? parseInt(parts[3], 10) : DEFAULT_TTL;
 
           data = {
             type: recordType,
