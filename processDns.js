@@ -26,6 +26,7 @@ fs.readdir(recordsDir, (err, files) => {
       
       content.forEach((line) => {
         const parts = line.split(' ');
+
         if (parts.length < 3) {
           console.error(`Invalid DNS record format in file: ${file}, line: ${line}`);
           return;
@@ -33,13 +34,17 @@ fs.readdir(recordsDir, (err, files) => {
 
         const recordType = parts[0]; // A, AAAA, CNAME, TXT, MX, etc.
         const name = parts[1]; // The domain or subdomain name
-        const recordContent = parts[2]; // The IP, mail server, CNAME target, or value
-        const ttl = parts[parts.length - 1] && !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL; // Default to 3600 if TTL is not provided
+        let recordContent = parts.slice(2, -1).join(' '); // Capture the content, handle spaces for TXT
+        const ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
 
-        // For MX records, we need to capture the priority
         let data = {};
         if (recordType === 'MX') {
-          const priority = parseInt(parts[3]); // MX has priority before TTL
+          if (parts.length < 4) {
+            console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
+            return;
+          }
+          const priority = parseInt(parts[2]);
+          recordContent = parts[3]; // After priority, the content should be at parts[3]
           data = {
             type: 'MX',
             name: name,
