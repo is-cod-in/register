@@ -1,0 +1,5 @@
+A example.com 192.0.2.1 3600
+AAAA example.com 2001:0db8:85a3::8a2e:0370:7334 3600
+CNAME www.example.com example.com 3600
+TXT example.com "v=spf1 include:_spf.google.com ~all" 3600
+MX example.com mail.example.com 10 3600
