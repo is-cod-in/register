@@ -1,16 +1,5 @@
-# DNS Records for example.is-cod.in
-
-# A Record
 A example.is-cod.in 192.0.2.1
-
-# AAAA Record
 AAAA ipv6.example.is-cod.in 2001:0db8:85a3:0000:0000:8a2e:0370:7334
-
-# CNAME Record
 CNAME www.example.is-cod.in example.is-cod.in
-
-# TXT Record for SPF
 TXT example.is-cod.in "v=spf1 include:example.com ~all"
-
-# MX Record for mail server
 MX example.is-cod.in mail.example.com 10
