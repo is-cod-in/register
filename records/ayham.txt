@@ -1,5 +1,5 @@
-A ayham 192.0.2.1 3600 true
-AAAA ayham 2001:0db8:85a3::8a2e:0370:7334 3600 false
+A ayham 192.0.2.1 3600
+AAAA ayham 2001:0db8:85a3::8a2e:0370:7334 3600
 CNAME ayham example.com 3600
 TXT example.com "v=spf1 include:_spf.google.com ~all" 3600
-MX example.com 10 mail.example.com 3600
+MX ayham 10 mail.example.com 3600
