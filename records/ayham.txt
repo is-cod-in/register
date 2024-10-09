@@ -1,5 +1,5 @@
 A ayham 192.0.2.1 3600
 AAAA ayham 2001:0db8:85a3::8a2e:0370:7334 3600
-CNAME ayham www.example.com 3600
+CNAME ayham.is-cod.in www.example.com 3600
 TXT ayham "v=spf1 include:_spf.google.com ~all" 3600
 MX ayham 10 mail.exambddbple.com 3600
