@@ -3,9 +3,7 @@ const path = require('path');
 const axios = require('axios');
 
 // Cloudflare API settings
-const CF_API_TOKEN = process.env.CF_API_TOKEN;
-const CF_ZONE_ID = process.env.CF_ZONE_ID;
-const CF_API_URL = `https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/dns_records`;
+const CF_API_URL = `https://api.cloudflare.com/client/v4/zones/${process.env.CF_ZONE_ID}/dns_records`;
 
 // Default TTL if none is provided (3600 seconds)
 const DEFAULT_TTL = 3600;
@@ -94,7 +92,7 @@ fs.readdir(recordsDir, (err, files) => {
         // Make a POST request to Cloudflare API
         axios.post(CF_API_URL, data, {
           headers: {
-            'Authorization': `Bearer ${CF_API_TOKEN}`,
+            'Authorization': `Bearer ${process.env.CF_API_TOKEN}`,
             'Content-Type': 'application/json'
           }
         })
