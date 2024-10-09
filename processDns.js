@@ -83,12 +83,13 @@ fs.readdir(recordsDir, (err, files) => {
 
         // Make a POST request to Cloudflare API
         axios.post(CF_API_URL, data, {
-          headers: {
-            'Authorization': `Bearer ${CF_API_TOKEN}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
+  headers: {
+    'Authorization': `Bearer ${CF_API_TOKEN}`,
+    'Content-Type': 'application/json'
+  },
+  timeout: 10000  // Timeout in milliseconds
+})
+      .then(response => {
           if (response.data.success) {
             console.log(`Successfully updated ${recordType} record for ${name}`);
           } else {
