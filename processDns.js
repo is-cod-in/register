@@ -75,7 +75,20 @@ fs.readdir(recordsDir, (err, files) => {
             content: recordContent,
             ttl: ttl
           };
-        } else {
+        } else if (recordType === 'CNAME') {
+  // Handle CNAME record
+  recordContent = parts[2]; // Content for CNAME
+  ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
+
+  data = {
+    type: 'CNAME',
+    name: name, // This should be 'araan.is-cod.in'
+    content: recordContent, // This should be 'target-domain.com'
+    ttl: ttl
+  };
+        }
+        
+        else {
           // Handle other record types (A, AAAA, CNAME)
           recordContent = parts[2]; // Content for A, AAAA, CNAME
           ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
