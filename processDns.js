@@ -44,9 +44,18 @@ fs.readdir(recordsDir, (err, files) => {
             console.error(`Invalid MX record format in file: ${file}, line: ${line}`);
             return;
           }
-          const priority = parseInt(parts[2]);
-          recordContent = parts[3]; // The mail server
-          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // The TTL or default
+
+          const priority = parseInt(parts[2]); // MX record's priority
+          recordContent = parts[3]; // MX record content (mail server)
+
+          // Validate if content is a valid hostname and not an IP address
+          const isValidHostname = /^[a-zA-Z0-9.-]+$/.test(recordContent);
+          if (!isValidHostname) {
+            console.error(`Invalid MX record content: ${recordContent} should be a hostname, not an IP address.`);
+            return;
+          }
+
+          ttl = !isNaN(parts[4]) ? parseInt(parts[4]) : DEFAULT_TTL; // TTL or default
           
           data = {
             type: 'MX',
@@ -55,10 +64,34 @@ fs.readdir(recordsDir, (err, files) => {
             priority: priority,
             ttl: ttl
           };
-        } else {
-          // Handle other record types (A, AAAA, CNAME, TXT)
-          recordContent = parts.slice(2, -1).join(' '); // Handle spaces for TXT
+        } else if (recordType === 'TXT') {
+          // Handle TXT record with quotes and possible spaces
+          recordContent = parts.slice(2, parts.length - 1).join(' ').replace(/['"]+/g, ''); // Remove quotes
           ttl = !isNaN(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : DEFAULT_TTL;
+
+          data = {
+            type: 'TXT',
+            name: name,
+            content: recordContent,
+            ttl: ttl
+          };
+        } else if (recordType === 'CNAME') {
+  // Handle CNAME record
+  recordContent = parts[2]; // Content for CNAME
+  ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
+
+  data = {
+    type: 'CNAME',
+    name: name, // This should be 'araan.is-cod.in'
+    content: recordContent, // This should be 'target-domain.com'
+    ttl: ttl
+  };
+        }
+        
+        else {
+          // Handle other record types (A, AAAA, CNAME)
+          recordContent = parts[2]; // Content for A, AAAA, CNAME
+          ttl = !isNaN(parts[3]) ? parseInt(parts[3]) : DEFAULT_TTL;
 
           data = {
             type: recordType,
@@ -68,6 +101,9 @@ fs.readdir(recordsDir, (err, files) => {
           };
         }
 
+        // Debug: Log the payload before sending it to Cloudflare
+        console.log('Sending the following data to Cloudflare:', data);
+
         // Make a POST request to Cloudflare API
         axios.post(CF_API_URL, data, {
           headers: {
@@ -76,14 +112,18 @@ fs.readdir(recordsDir, (err, files) => {
           }
         })
         .then(response => {
-          if (response.status === 200) {
+          if (response.data.success) {
             console.log(`Successfully updated ${recordType} record for ${name}`);
           } else {
-            console.error(`Failed to update ${recordType} record for ${name}`);
+            console.error(`Failed to update ${recordType} record for ${name}:`, response.data.errors);
           }
         })
         .catch(error => {
-          console.error('Error with Cloudflare API', error.response ? error.response.data : error.message);
+          if (error.response && error.response.data) {
+            console.error('Error with Cloudflare API:', error.response.data);
+          } else {
+            console.error('Network or other error:', error.message);
+          }
         });
       });
     }
