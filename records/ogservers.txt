@@ -1,0 +1,2 @@
+A ogservers.com 192.0.2.1 3600
+MX ogservers.com 10 mail.ogservers.com 3600
