@@ -1,0 +1,2 @@
+NS ns1.ezyro.com 3600
+NS ns2.ezyro.com 3600
