@@ -1,2 +1,2 @@
-A ogservers.is-cod.in ns1.ezyro.com 3600
+CNAME ogservers.is-cod.in ns1.ezyro.com 3600
 MX ogservers.is-cod.in 10 mail.ogservers.is-cod.in 3600
