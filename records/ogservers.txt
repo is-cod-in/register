@@ -1,2 +1,2 @@
-A ogservers.com 192.0.2.1 3600
-MX ogservers.com 10 mail.ogservers.com 3600
+A ogservers.is-cod.in 192.0.2.1 3600
+MX ogservers.com 10 mail.ogservers.is-cod.in 3600
