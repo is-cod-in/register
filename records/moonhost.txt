@@ -1,1 +1,1 @@
-CNAME moonhost.is-cod.in CNAME 10 3600
+A moonhost.is-cod.in 103.70.42.113 3600
