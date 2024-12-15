@@ -1,0 +1,1 @@
+CNAME moonhost.is-cod.in CNAME 10 3600
