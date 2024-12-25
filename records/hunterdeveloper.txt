@@ -1,0 +1,2 @@
+ns1.byet.org
+ns2.byet.org
