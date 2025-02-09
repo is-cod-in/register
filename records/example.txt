@@ -1,5 +1,1 @@
-A example.is-cod.in 192.0.2.1
-AAAA ipv6.example.is-cod.in 2001:0db8:85a3:0000:0000:8a2e:0370:7334
-CNAME www.example.is-cod.in example.is-cod.in
-TXT example.is-cod.in "v=spf1 include:example.com ll"
-MX example.com mail.example.com 20 3600
+baigan.is-cod.in 159.223.46.94
