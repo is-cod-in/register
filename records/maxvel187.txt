@@ -1,0 +1,2 @@
+CNAME maxvel187.is-cod.in b6e7c84db676792c.vercel-dns-017.com 3600
+TXT _vercel "vc-domain-verify=maxvel187.is-cod.in,bfb386c133b6e05a105c" 3600
