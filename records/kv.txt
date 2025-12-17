@@ -1,0 +1,2 @@
+CNAME kv.is-cod.in ghs.google.com 3600
+CNAME mjamka4wnu6n.is-cod.in gv-65ixco4cyvijl7.dv.googlehosted.com 3600
