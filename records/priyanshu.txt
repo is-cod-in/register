@@ -1,0 +1,2 @@
+CNAME priyanshu.is-cod.in 34ca1ba7f7ef30a8.vercel-dns-017.com 3600
+TXT _vercel "vc-domain-verify=priyanshu.is-cod.in,b4b1cb97a525c7d3e23a" 3600
