@@ -1,0 +1,2 @@
+CNAME aldi.is-cod.in 35248ef95d3ba8cd.vercel-dns-017.com 3600
+TXT _vercel "vc-domain-verify=aldi.is-cod.in,57bc99d6adfb0319e6e6" 3600
