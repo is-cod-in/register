@@ -1,0 +1,1 @@
+CNAME aldi.is-cod.in map.cname.dev 3600
