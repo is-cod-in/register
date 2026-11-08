@@ -1,0 +1,1 @@
+CNAME tb.is-cod.in cname.vercel-dns.com 3600
